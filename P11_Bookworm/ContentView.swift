@@ -10,51 +10,29 @@ import SwiftUI
 
 
 struct ContentView: View {
+	@State private var showingAddScreen = false
 	
-	@State private var rememberMe = false
-	
-	@FetchRequest(sortDescriptors: []) var students : FetchedResults<Student>
 	@Environment(\.managedObjectContext) var moc
+	@FetchRequest(sortDescriptors: []) var books : FetchedResults<Book>
 	
     var body: some View {
-		 VStack{
-			 List(students) { student in
-				 Text(student.name ?? "Unknown")
-			 }
-			 Button("ADD"){
-				 let firstNames = ["Ginny","Harry","Hermione","Luna","Ron"]
-				 let lastNames = ["Granger","Lovegood","Potter","Weasley"]
-				 
-				 let chosenFirstName = firstNames.randomElement()!
-				 let chosenLastName = lastNames.randomElement()!
-				 
-				 let student = Student(context: moc)
-				 student.id = UUID()
-				 student.name = "\(chosenFirstName) \(chosenLastName)"
-				 try? moc.save()
-			 }
-			 
+		 NavigationView{
+			 Text("Count : \(books.count)")
+				 .navigationTitle("Bookworm")
+				 .toolbar {
+					 ToolbarItem(placement: .navigationBarTrailing) {
+						 Button {
+							 showingAddScreen.toggle()
+						 } label: {
+							 Label("Add Book", systemImage: "plus")
+						 }
+					 }
+				 }
+				 .sheet(isPresented: $showingAddScreen) {
+					 AddBookView()
+				 }
 		 }
 	 }
-}
-
-struct PushButton: View {
-	let title: String
-	@Binding var isOn: Bool
-	
-	var onColors = [Color.red,Color.yellow]
-	var offColors = [Color(white: 0.6), Color(white: 0.4)]
-	
-	var body: some View {
-		Button(title) {
-			isOn.toggle()
-		}
-		.padding()
-		.background(LinearGradient(gradient: Gradient(colors: isOn ? onColors: offColors), startPoint: .top, endPoint: .bottom))
-		.foregroundColor(.white)
-		.clipShape(Capsule())
-		.shadow(radius: isOn ? 0 : 5)
-	}
 }
 
 
@@ -62,6 +40,5 @@ struct PushButton: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
-			 .environment(\.managedObjectContext, DataController().container.viewContext)
     }
 }
