@@ -14,10 +14,12 @@ struct AddBookView: View {
 	@State private var title = ""
 	@State private var author = ""
 	@State private var rating = 3
-	@State private var genre = ""
+	@State private var genre = "None"
 	@State private var review = ""
-	
-	let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller"]
+	var disableForm: Bool{
+		title == "" || author == ""
+	}
+	let genres = ["Fantasy", "Horror", "Kids", "Mystery", "Poetry", "Romance", "Thriller","None"]
 	
     var body: some View {
 		 NavigationView{
@@ -53,8 +55,10 @@ struct AddBookView: View {
 						 dismiss()
 					 }
 				 }
+				 .disabled(disableForm)
 			 }
 			 .navigationTitle("Add Book")
+			 
 		 }
     }
 }
