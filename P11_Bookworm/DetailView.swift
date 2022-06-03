@@ -17,11 +17,11 @@ struct DetailView: View {
 	var body: some View {
 		ScrollView{
 			ZStack(alignment: .bottomTrailing) {
-				Image(book.genre ?? "Fantasy")
+				Image(book.genre ?? "None")
 					.resizable()
 					.scaledToFit()
 				
-				Text(book.genre?.uppercased() ?? "FANTASY")
+				Text(book.genre?.uppercased() ?? "NONE")
 					.font(.caption)
 					.fontWeight(.black)
 					.padding(8)
@@ -51,6 +51,10 @@ struct DetailView: View {
 			.foregroundColor(.secondary)
 		Text(book.review ?? "No review")
 			.padding()
+		
+		Text(book.date?.formatted(date: .complete, time: .omitted) ?? "None")
+			.padding()
+		
 		RatingView(rating: .constant(Int(book.rating)))
 			.font(.largeTitle)
 	}
