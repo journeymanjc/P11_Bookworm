@@ -17,6 +17,21 @@ struct ContentView: View {
 		SortDescriptor(\.title, order: .reverse)
 	]) var books : FetchedResults<Book>
 	
+	struct lowRating: ViewModifier{
+		var book: Book
+		func body(content: Content) -> some View {
+			
+			if book.rating == 1{
+				content
+					.foregroundColor(.red)
+			}else{
+				content
+			}
+			
+		}
+	}
+	
+	
     var body: some View {
 		 NavigationView{
 			 List{
@@ -29,6 +44,7 @@ struct ContentView: View {
 								 .font(.largeTitle)
 							 VStack(alignment: .leading) {
 								 Text(book.title ?? "Unknown Title").font(.headline)
+									 .modifier(lowRating(book: book))
 								 Text(book.author ?? "Unknown Author").foregroundColor(.secondary)
 							 }
 						 }
